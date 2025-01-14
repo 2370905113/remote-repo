@@ -1,0 +1,138 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\code\\visual studio\\c\u002B\u002B design\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\task.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|solutionrelative:Project1\\task.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|solutionrelative:Project1\\menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|solutionrelative:Project1\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\task.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|solutionrelative:Project1\\task.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\picture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|solutionrelative:Project1\\picture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|solutionrelative:Project1\\menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\book.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CEE52E6-951B-4078-8437-9FC11A2AE9F3}|Project1\\Project1.vcxproj|solutionrelative:Project1\\book.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "task.cpp",
+              "DocumentMoniker": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\task.cpp",
+              "RelativeDocumentMoniker": "Project1\\task.cpp",
+              "ToolTip": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\task.cpp*",
+              "RelativeToolTip": "Project1\\task.cpp*",
+              "ViewState": "AgIAAEcBAAAAAAAAAAAAAEwBAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-14T13:23:08.986Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "menu.h",
+              "DocumentMoniker": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\menu.h",
+              "RelativeDocumentMoniker": "Project1\\menu.h",
+              "ToolTip": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\menu.h",
+              "RelativeToolTip": "Project1\\menu.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-14T12:30:18.723Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "menu.cpp",
+              "DocumentMoniker": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\menu.cpp",
+              "RelativeDocumentMoniker": "Project1\\menu.cpp",
+              "ToolTip": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\menu.cpp",
+              "RelativeToolTip": "Project1\\menu.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-14T12:29:33.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "picture.cpp",
+              "DocumentMoniker": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\picture.cpp",
+              "RelativeDocumentMoniker": "Project1\\picture.cpp",
+              "ToolTip": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\picture.cpp",
+              "RelativeToolTip": "Project1\\picture.cpp",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-14T11:38:56.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "task.h",
+              "DocumentMoniker": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\task.h",
+              "RelativeDocumentMoniker": "Project1\\task.h",
+              "ToolTip": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\task.h",
+              "RelativeToolTip": "Project1\\task.h",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-13T10:56:50.796Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\main.cpp",
+              "RelativeDocumentMoniker": "Project1\\main.cpp",
+              "ToolTip": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\main.cpp",
+              "RelativeToolTip": "Project1\\main.cpp",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAADIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-12-23T02:46:55.768Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "book.cpp",
+              "DocumentMoniker": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\book.cpp",
+              "RelativeDocumentMoniker": "Project1\\book.cpp",
+              "ToolTip": "C:\\code\\visual studio\\c\u002B\u002B design\\Project1\\book.cpp",
+              "RelativeToolTip": "Project1\\book.cpp",
+              "ViewState": "AgIAAPYAAAAAAAAAAAAAABcBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-12-23T03:17:57.394Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
