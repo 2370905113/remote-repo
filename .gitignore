@@ -13,17 +13,18 @@ test1_uart/MDK-ARM/JLinkSettings.ini
 test1_uart/MDK-ARM/MDK-ARM.code-workspaceus
 test1_uart/MDK-ARM/test1_uart.uvguix.23709
 test1_uart/MDK-ARM/MDK-ARM.code-workspace
-.clang-format
-.code-workspace
-.uvguix.23709
-.code-workspaceus
-JLinkSettings.ini
-JLinkLog.txt
-.scvd
-.eide.usr.ctx.json
-.vscode
-.eide
-.cmsis
+*.clang-format
+*.code-workspace
+*.uvguix.23709
+*.code-workspaceus
+*JLinkSettings.ini
+*JLinkLog.txt
+*.scvd
+*.eide.usr.ctx.json
+*.vscode
+*.eide
+*.cmsis
+*.dbgconf
 # 输出文件
 infantry/
 # keil debug配置文件
