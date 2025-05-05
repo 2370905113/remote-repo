@@ -53,8 +53,8 @@ uint8_t CAN_Supercap_Tx_Data[8];
 
 uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
 uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
-uint8_t CAN1_MiniPc_Tx_Data[8];            //迷你主机给底盘发送缓冲区
-uint8_t CAN2_MiniPc_Tx_Data[8];           //迷你主机给底盘发送缓冲区
+uint8_t CAN1_MiniPc_Tx_Data[8];
+uint8_t CAN2_MiniPc_Tx_Data[8];
 //底盘分别给四个舵轮发送消息
 uint8_t CAN1_0x1a_Tx_Streeing_Wheel_A_data[8];
 uint8_t CAN1_0x1b_Tx_Streeing_Wheel_B_data[8];

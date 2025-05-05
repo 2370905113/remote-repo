@@ -100,6 +100,8 @@ extern uint8_t CAN_Supercap_Tx_Data[];
 extern uint8_t CAN2_Gimbal_Tx_Chassis_Data[];  //云台给底盘发送缓冲区
 extern uint8_t CAN2_Chassis_Tx_Gimbal_Data[];   //底盘给云台发送缓冲区
 
+extern uint8_t CAN1_MiniPc_Tx_Data[];
+extern uint8_t CAN2_MiniPc_Tx_Data[];
 extern uint8_t CAN1_0x1a_Tx_Streeing_Wheel_A_data[8];
 extern uint8_t CAN1_0x1b_Tx_Streeing_Wheel_B_data[8];
 extern uint8_t CAN1_0x1c_Tx_Streeing_Wheel_C_data[8];
@@ -122,8 +124,7 @@ extern uint8_t CAN2_0x145_Tx_Data[8];
 extern uint8_t CAN2_0x146_Tx_Data[8];
 extern uint8_t CAN2_0x147_Tx_Data[8];
 extern uint8_t CAN2_0x148_Tx_Data[8];
-extern uint8_t CAN1_MiniPc_Tx_Data[8];            //迷你主机给底盘发送缓冲区
-extern uint8_t CAN2_MiniPc_Tx_Data[8];
+
 /* Exported function declarations ---------------------------------------------*/
 
 void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function);

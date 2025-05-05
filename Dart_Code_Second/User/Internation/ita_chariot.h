@@ -41,7 +41,7 @@ protected:
     //内部函数
     void Control_Booster();
     void Control_Gimbal();
-    float MiniPC_Yaw_K = -0.003f;
+    float MiniPC_Yaw_K=-0.003f;
 };
 #define DR16_Yaw_Angle_Resolution  0.005f * PI * 57.29577951308232
 #endif

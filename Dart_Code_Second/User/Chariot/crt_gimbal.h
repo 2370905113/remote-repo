@@ -26,6 +26,7 @@ public:
     void Calculate_Yaw_Now_Angle();
     inline void Set_Yaw_Target_Angle(float _Yaw_Target_Angle);
     void TIM_PID_PeriodElapsedCallback();
+    
 };
 class Class_Gimbal
 {
@@ -38,26 +39,43 @@ public:
     inline void Set_Gimbal_Status(Enum_Gimbal_Status _gimbal_status);
     void Init();
     void TIM_Gimbal_PeriodElapsedCallback();
-    //25m 一 二 三 四
-    float auto_yaw[4]={
+    float *auto_yaw;
+    float *yaw_delta;
+    float auto_yaw_16m[4]=
+    {
         -3.5f,
         -3.5f,
         -3.5f,
         -3.5f
-        };
-    float yaw_delta[4]=
+    };
+    float auto_yaw_25m[4]=
+    {
+        -3.5f,
+        -3.5f,
+        -3.5f,
+        -3.5f
+    };
+    float yaw_delta_16m[4]=
     {
         0.25f,
         0.25f,
         0.1f,
         0.0f,    
-    };   
+    };
+    float yaw_delta_25m[4]=
+    {
+        0.25f,
+        0.25f,
+        0.1f,
+        0.0f,  
+    };
 protected:
     //变量
     Enum_Gimbal_Status gimbal_status;
     float Target_Yaw_Angle;
     //函数
     void OutPut();
+
 };
 #define  YAW_GEAR_RATIO  (72.f/1052.f)
 
