@@ -84,6 +84,7 @@ uint16_t flash_Write_data[12];
 uint16_t flash_Read_data[12];
 float yaw_temp[12];
 bool Flash_Ready = false;
+int yaw_to_tagert_cnt=0;
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
@@ -111,13 +112,13 @@ void Task1ms_TIM5_Callback()
     if (chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_OUTPOST)
     {
         chariot.booster.autofric = chariot.booster.autofric_16m;
-        chariot.gimbal.auto_yaw = chariot.gimbal.auto_yaw_16m;
+
         chariot.gimbal.yaw_delta = chariot.gimbal.yaw_delta_16m;
     }
     else if (chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_BASE || chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_Randam_BASE)
     {
         chariot.booster.autofric = chariot.booster.autofric_25m;
-        chariot.gimbal.auto_yaw = chariot.gimbal.auto_yaw_25m;
+
         chariot.gimbal.yaw_delta = chariot.gimbal.yaw_delta_25m;
     }
     chariot.booster.Dart_Launch_Status = (Enum_Dart_Launch_Status)(shoot_temp);
@@ -129,9 +130,10 @@ void Task1ms_TIM5_Callback()
         flash_Write_data[i] = Math_Abs(chariot.gimbal.yaw_angle_16m) * 100;
     }
 
-    if (Flash_Ready && chariot.booster.Push_Motor.Push_Now_Length < 0.005)
+    if (Flash_Ready && chariot.booster.Push_Motor.Push_Now_Length < 0.002)
     {
         WriteDataBlock(flash_Write_data);
+        Flash_Ready=false;
     }
     if(chariot.booster.Actual_Launch_Cnt==4)
     {
@@ -144,6 +146,21 @@ void Task1ms_TIM5_Callback()
         yaw_temp[i] = -flash_Read_data[i] / 100.0f;
     }
 
+
+
+
+    //计算行程
+    if(Math_Abs(chariot.gimbal.Yaw.Yaw_Now_Angle-chariot.gimbal.yaw_angle_16m-chariot.gimbal.yaw_delta[chariot.booster.Actual_Launch_Cnt])<0.05)
+    {
+        yaw_to_tagert_cnt++;
+    }
+    chariot.booster.Yaw_To_Target_Bool = false;
+    if(yaw_to_tagert_cnt>150)
+    {
+        chariot.booster.Yaw_To_Target_Bool = true;
+        yaw_to_tagert_cnt=0;
+    }
+    
     chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
 #ifdef NORMAL
     chariot.TIM_Control_Callback();

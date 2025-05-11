@@ -55,14 +55,31 @@ void Class_Chariot::Control_Booster()
 #endif
 
 #ifdef NORMAL
-    booster.Set_Booster_Status(Booster_Enable);
-    booster.Set_Fric_Open_Status(Fric_Open);
-    booster.Push_Backward_To_Zero_Pos = DISABLE;
-    booster.Set_Booster_Control_Type(Booster_Control_Ceasefire);
+    if (booster.Dart_Launch_Status == Dart_30s || booster.Dart_Launch_Status == Dart_4min)
+    {
+        booster.Set_Booster_Status(Booster_Enable);
+        booster.Set_Fric_Open_Status(Fric_Open);
+        booster.Push_Backward_To_Zero_Pos = DISABLE;
+        booster.Set_Booster_Control_Type(Booster_Control_Ceasefire);
+    }
+    else
+    {
+        booster.Set_Booster_Status(Booster_Enable);
+        booster.Set_Fric_Open_Status(Fric_Close);
+        booster.Push_Backward_To_Zero_Pos = ENABLE;
+    }
+    if(booster.Dart_Launch_Status == Dart_4min&&booster.Push_Motor.Push_Now_Length < 0.002)
+    {
+        booster.Set_Booster_Status(Booster_Enable);
+        booster.Set_Fric_Open_Status(Fric_Close);
+        booster.Push_Backward_To_Zero_Pos = ENABLE;
+    }
 #endif // NORMAL
 }
 float K = 0.04f;
 uint16_t calibration_cnt = 0;
+float yaw_error_arr[12] = {0};
+float yaw_error_temp = 0;
 void Class_Chariot::Control_Gimbal()
 {
     float dr_r_x;
@@ -80,43 +97,60 @@ void Class_Chariot::Control_Gimbal()
         // Math_Constrain(&tmp_gimbal_yaw, 0.0f, 18.0f);
         if (Gimbal_Calibration_Bool == false)
         {
-            auto_gimbal_yaw = 50.0f;
+            gimbal.Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+            gimbal.Yaw.Set_Target_Omega_Rpm(50.0f);
         }
 
-        if (gimbal.Yaw.Get_Now_Torque() > 2000.0f )
+        if (gimbal.Yaw.Get_Now_Torque() > 2000.0f)
         {
             calibration_cnt++;
         }
-        if (calibration_cnt > 250&&Gimbal_Calibration_Bool==false)
+        else
         {
+            calibration_cnt = 0;
+        }
+        if (calibration_cnt > 250 && Gimbal_Calibration_Bool == false)
+        {
+            gimbal.Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
             gimbal.Yaw.Calibration_Angle = gimbal.Yaw.Get_Now_Angle();
             Gimbal_Calibration_Bool = true;
         }
         if (Gimbal_Calibration_Bool)
         {
-            if (booster.Actual_Launch_Cnt < 4)
-            {
-                auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[booster.Actual_Launch_Cnt];
-            }
-            else if (booster.Actual_Launch_Cnt >= 4)
-            {
-                auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[0];
-            }
             if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == false)
             {
-                auto_gimbal_yaw = gimbal.Yaw.Yaw_Now_Angle + MiniPC.yaw_error * MiniPC_Yaw_K;
+                auto_gimbal_yaw = gimbal.Yaw.Yaw_Now_Angle + MiniPC.yaw_error * MiniPC.yaw_error * MiniPC.yaw_error / 10000.0f * MiniPC_Yaw_K;
                 if (Math_Abs(MiniPC.yaw_error) < 25.f)
                 {
+                    init_cnt++;
+                }
+                else
+                {
+                    init_cnt = 0;
+                }
+                if (init_cnt > 2000)
+                {
                     init_flag = true;
-                    gimbal.Set_16m_Yaw_Angle(auto_gimbal_yaw);
+                    gimbal.Set_16m_Yaw_Angle(gimbal.Yaw.Yaw_Now_Angle);
                 }
             }
             else if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == true)
             {
                 auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[booster.Actual_Launch_Cnt];
             }
+            if (init_flag)
+            {
+                if (booster.Actual_Launch_Cnt < 4)
+                {
+                    auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[booster.Actual_Launch_Cnt];
+                }
+                else if (booster.Actual_Launch_Cnt >= 4)
+                {
+                    auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[0];
+                }
+            }
+            gimbal.Set_Target_Yaw_Angle(auto_gimbal_yaw);
         }
-        gimbal.Set_Target_Yaw_Angle(auto_gimbal_yaw);
         // gimbal.Yaw.Now_Image=MiniPC.yaw_error;
         break;
     case DR16_Status_DISABLE:
@@ -133,17 +167,51 @@ void Class_Chariot::Control_Gimbal()
     // dr_r_x = dr16.Get_Right_X();
     // tmp_gimbal_yaw -= dr_r_x * DR16_Yaw_Angle_Resolution * K;
     // Math_Constrain(&tmp_gimbal_yaw, 0.0f, 18.0f);
+    gimbal.Yaw.Now_Image = MiniPC.yaw_error;
     if (Gimbal_Calibration_Bool == false)
     {
-        auto_gimbal_yaw = 50.0f;
+        gimbal.Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        gimbal.Yaw.Set_Target_Omega_Rpm(50.0f);
     }
+
     if (gimbal.Yaw.Get_Now_Torque() > 2000.0f)
     {
+        calibration_cnt++;
+    }
+    else
+    {
+        calibration_cnt = 0;
+    }
+    if (calibration_cnt > 250 && Gimbal_Calibration_Bool == false)
+    {
+        gimbal.Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
         gimbal.Yaw.Calibration_Angle = gimbal.Yaw.Get_Now_Angle();
         Gimbal_Calibration_Bool = true;
     }
     if (Gimbal_Calibration_Bool)
     {
+        if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == false)
+        {
+            gimbal.Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_Image);
+            if (Math_Abs(MiniPC.yaw_error) < 15.f)
+            {
+                init_cnt++;
+            }
+            else
+            {
+                init_cnt = 0;
+            }
+            if (init_cnt > 800)
+            {
+                init_flag = true;
+                gimbal.Set_16m_Yaw_Angle(gimbal.Yaw.Yaw_Now_Angle);
+            }
+        }
+        else if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == true)
+        {
+            gimbal.Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+        }
+
         if (booster.Actual_Launch_Cnt < 4)
         {
             auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[booster.Actual_Launch_Cnt];
@@ -152,21 +220,44 @@ void Class_Chariot::Control_Gimbal()
         {
             auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[0];
         }
-        if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == false)
-        {
-            auto_gimbal_yaw = gimbal.Yaw.Yaw_Now_Angle + MiniPC.yaw_error * MiniPC_Yaw_K;
-            if (Math_Abs(MiniPC.yaw_error) < 25.f)
-            {
-                init_flag = true;
-                gimbal.Set_16m_Yaw_Angle(auto_gimbal_yaw);
-            }
-        }
-        else if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == true)
-        {
-            auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[booster.Actual_Launch_Cnt];
-        }
+        gimbal.Set_Target_Yaw_Angle(auto_gimbal_yaw);
     }
-    gimbal.Set_Target_Yaw_Angle(auto_gimbal_yaw);
+    // if (Gimbal_Calibration_Bool)
+    // {
+    //     if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == false)
+    //     {
+    //         auto_gimbal_yaw = gimbal.Yaw.Yaw_Now_Angle + MiniPC.yaw_error * MiniPC.yaw_error * MiniPC.yaw_error / 10000.0f * MiniPC_Yaw_K;
+    //         if (Math_Abs(MiniPC.yaw_error) < 15.f)
+    //         {
+    //             init_cnt++;
+    //         }
+    //         else
+    //         {
+    //             init_cnt = 0;
+    //         }
+    //         if (init_cnt > 2000)
+    //         {
+    //             init_flag = true;
+    //             gimbal.Set_16m_Yaw_Angle(gimbal.Yaw.Yaw_Now_Angle);
+    //         }
+    //     }
+    //     else if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE && init_flag == true)
+    //     {
+    //         auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[booster.Actual_Launch_Cnt];
+    //     }
+    //     if (init_flag)
+    //     {
+    //         if (booster.Actual_Launch_Cnt < 4)
+    //         {
+    //             auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[booster.Actual_Launch_Cnt];
+    //         }
+    //         else if (booster.Actual_Launch_Cnt >= 4)
+    //         {
+    //             auto_gimbal_yaw = gimbal.Get_16m_Yaw_Angle() + gimbal.yaw_delta[0];
+    //         }
+    //     }
+    //     gimbal.Set_Target_Yaw_Angle(auto_gimbal_yaw);
+    // }
 #endif // NORMAL
 }
 void Class_Chariot::TIM_Control_Callback()
@@ -176,7 +267,6 @@ void Class_Chariot::TIM_Control_Callback()
 }
 void Class_Chariot::TIM_Chariot_PeriodElapsedCallback()
 {
-
     booster.TIM_Booster_PeriodElapsedCallback();
     gimbal.TIM_Gimbal_PeriodElapsedCallback();
     MiniPC.TIM_Write_PeriodElapsedCallback();

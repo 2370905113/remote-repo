@@ -4,8 +4,8 @@
 #include "dvc_djimotor.h"
 #include "alg_fsm.h"
 
-#define DEBUG
-//#define NORMAL
+//#define DEBUG
+#define NORMAL
 
 //#define MINIPC_COMM_USB
 #define MINIPC_COMM_CAN
@@ -86,9 +86,12 @@ public:
     //int16_t autofric[4] = {7743, 7652, 7688, 7926};
     // int16_t autofric[4] = {6880, 6936, 6325, 6381};
     //int32_t autofric[4] = {7000, 7000, 7000, 7000};
-    int16_t autofric_16m[4]={6450,6450,6500,6550};
+    int16_t autofric_16m[4]={6400,6250,6300,6300};
     int16_t autofric_25m[4]={6500,7500,7500,7500};
     int16_t* autofric;
+    int yaw_to_target_cnt=0;
+    bool Yaw_To_Target_Bool=false;
+    bool Launch_Change_Bool=false;
 protected:
     
     int16_t Fric_Speed_High = autofric_16m[Actual_Launch_Cnt]; // rpm

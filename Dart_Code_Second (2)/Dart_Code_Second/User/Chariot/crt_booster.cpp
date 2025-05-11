@@ -6,11 +6,11 @@ void Class_Fric_Motor::TIM_PID_PeriodElapsedCallback()
     {
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
-        //默认开环扭矩控制
+        // 默认开环扭矩控制
         Out = Target_Torque / Torque_Max * Output_Max;
     }
     break;
-    break;
+        break;
     case (DJI_Motor_Control_Method_OMEGA):
     {
         PID_Omega.Set_Target(Target_Omega_Rpm);
@@ -34,11 +34,11 @@ void Class_Push_Motor::TIM_PID_PeriodElapsedCallback()
     {
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
-        //默认开环扭矩控制
+        // 默认开环扭矩控制
         Out = Target_Torque / Torque_Max * Output_Max;
     }
     break;
-    break;
+        break;
     case (DJI_Motor_Control_Method_OMEGA):
     {
         PID_Omega.Set_Target(Target_Omega_Rpm);
@@ -60,8 +60,8 @@ void Class_Booster::Init()
 {
     // 初始化发射机构使能状态
     booster_status = Booster_Disable;
-    //初始化发射状态机
-    booster_fsm.Init(3,0);
+    // 初始化发射状态机
+    booster_fsm.Init(3, 0);
     // 摩擦轮电机初始化
     Fric_Motor[0].Init(&hcan1, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA, 1.0f);
     Fric_Motor[0].PID_Omega.Init(5.0f, 0.01f, 0.0f, 0.0f, 2000.0f, 16500.0f, 0.0f, 0.0f, 0.0f, 0.001);
@@ -75,7 +75,7 @@ void Class_Booster::Init()
     Fric_Motor[3].Init(&hcan1, DJI_Motor_ID_0x204, DJI_Motor_Control_Method_OMEGA, 1.0f);
     Fric_Motor[3].PID_Omega.Init(5.0f, 0.01f, 0.0f, 0.0f, 2000.0f, 16500.0f, 0.0f, 0.0f, 0.0f, 0.001);
     // Push电机初始化
-    Push_Motor.Init(&hcan2, DJI_Motor_ID_0x201,DJI_Motor_Control_Method_OMEGA);
+    Push_Motor.Init(&hcan2, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA);
     Push_Motor.PID_Omega.Init(15.0f, 0.00f, 0.0f, 0.0f, 2000.0f, 11000.0f, 0.0f, 0.0f, 0.0f, 0.001);
 }
 void Class_Push_Motor::Calculate_Push_Length()
@@ -84,11 +84,11 @@ void Class_Push_Motor::Calculate_Push_Length()
 }
 void Class_Booster::OutPut()
 {
-    float fric_speed=0.0f;
+    float fric_speed = 0.0f;
     switch (booster_status)
     {
     case Booster_Disable:
-    {// 摩擦轮
+    { // 摩擦轮
         for (auto i = 0; i < 4; i++)
         {
             Fric_Motor[i].fric_status = Fric_Disable;
@@ -113,13 +113,13 @@ void Class_Booster::OutPut()
         {
             Fric_Motor[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
         }
-        if(fric_open_status==Fric_Open)
+        if (fric_open_status == Fric_Open)
         {
-            if(Actual_Launch_Cnt<4)
+            if (Actual_Launch_Cnt < 4)
             {
                 fric_speed = autofric[Actual_Launch_Cnt];
             }
-            if(Actual_Launch_Cnt==4)
+            if (Actual_Launch_Cnt == 4)
             {
                 fric_speed = autofric[0];
             }
@@ -136,16 +136,15 @@ void Class_Booster::OutPut()
             {
                 Fric_Motor[i].Set_Target_Omega_Rpm(0);
             }
-            
         }
-        //Push机构
-        // switch (booster_control_type)
-        // {
-        // case Booster_Control_Ceasefire:
-        // { // 0:判断cnt数量：if==4 -> 清0 , 转到2; if(！=4) -> 1;
-        //     // 1转到判断cnt=1,2,3,4,是否到达目标位置，if(到目标位置)->cnt=cnt;转到0
-        //     // 2:恢复飞镖Push零位，if(恢复到0位)；转到
-        // break;
+        // Push机构
+        //  switch (booster_control_type)
+        //  {
+        //  case Booster_Control_Ceasefire:
+        //  { // 0:判断cnt数量：if==4 -> 清0 , 转到2; if(！=4) -> 1;
+        //      // 1转到判断cnt=1,2,3,4,是否到达目标位置，if(到目标位置)->cnt=cnt;转到0
+        //      // 2:恢复飞镖Push零位，if(恢复到0位)；转到
+        //  break;
 
         // case Booster_Control_Single:
         // {
@@ -161,27 +160,28 @@ void Class_Booster::OutPut()
         {
         case 0:
         {
-            #ifdef DEBUG
-            if(booster_control_type==Booster_Control_Single&&Target_Launch_Cnt<=4)
-            {
-                Target_Launch_Cnt++;
-                booster_fsm.Set_Status(1);
-            }
-            #endif
             
-            #ifdef NORMAL
-            if(Dart_Launch_Status==Dart_30s&&Target_Launch_Cnt<2)
+#ifdef DEBUG
+            if (booster_control_type == Booster_Control_Single && Target_Launch_Cnt <= 4)
             {
                 Target_Launch_Cnt++;
                 booster_fsm.Set_Status(1);
             }
-            if(Dart_Launch_Status==Dart_4min&&Target_Launch_Cnt<=4&&Target_Launch_Cnt>=2)
+#endif
+
+#ifdef NORMAL
+            if (Dart_Launch_Status == Dart_30s && Target_Launch_Cnt < 4)
             {
                 Target_Launch_Cnt++;
-                booster_fsm.Set_Status(1); 
+                booster_fsm.Set_Status(1);
             }
-            #endif
-            if(Target_Launch_Cnt>4||(Push_Backward_To_Zero_Pos==ENABLE))
+            if (Dart_Launch_Status == Dart_4min && Target_Launch_Cnt <= 4 && Target_Launch_Cnt >= 4)
+            {
+                Target_Launch_Cnt++;
+                booster_fsm.Set_Status(1);
+            }
+#endif
+            if (Target_Launch_Cnt > 4 || (Push_Backward_To_Zero_Pos == ENABLE))
             {
                 booster_fsm.Set_Status(2);
             }
@@ -189,10 +189,16 @@ void Class_Booster::OutPut()
         break;
         case 1:
         {
-            Push_Motor.Push_Target_length = Target_Launch_Cnt*0.147f;
-            if(fabsf(Push_Motor.Push_Target_length - Push_Motor.Push_Now_Length) < 0.001f)
+
+            if (Yaw_To_Target_Bool)
+            {
+                Launch_Change_Bool=true;
+                Push_Motor.Push_Target_length = Target_Launch_Cnt * 0.147f;
+            }
+            if (fabsf(Push_Motor.Push_Target_length - Push_Motor.Push_Now_Length) < 0.001f&&Launch_Change_Bool)
             {
                 Actual_Launch_Cnt = Target_Launch_Cnt;
+                Launch_Change_Bool=false;
                 Set_Booster_Control_Type(Booster_Control_Ceasefire);
                 booster_fsm.Set_Status(0);
             }
@@ -201,7 +207,7 @@ void Class_Booster::OutPut()
         case 2:
         {
             Push_Motor.Push_Target_length = Zero_Length;
-            if(fabsf(Push_Motor.Push_Target_length - Push_Motor.Push_Now_Length) < 0.001f)
+            if (fabsf(Push_Motor.Push_Target_length - Push_Motor.Push_Now_Length) < 0.001f)
             {
                 Target_Launch_Cnt = 0;
                 Actual_Launch_Cnt = 0;
@@ -235,12 +241,11 @@ void Class_Booster::OutPut()
         break;
     }
     break;
-
     }
 }
 void Class_Booster::TIM_Booster_PeriodElapsedCallback()
 {
-    //计算push丝杆的行程
+    // 计算push丝杆的行程
     Push_Motor.Calculate_Push_Length();
 
     OutPut();
@@ -249,5 +254,4 @@ void Class_Booster::TIM_Booster_PeriodElapsedCallback()
         Fric_Motor[i].TIM_PID_PeriodElapsedCallback();
     }
     Push_Motor.TIM_PID_PeriodElapsedCallback();
-
 }

@@ -41,8 +41,9 @@ protected:
     //内部函数
     void Control_Booster();
     void Control_Gimbal();
-    float MiniPC_Yaw_K=-0.0005f;
+    float MiniPC_Yaw_K=-0.001f;
     bool init_flag=false;
+    int init_cnt=0;
     float auto_gimbal_yaw;
     bool Gimbal_Calibration_Bool = false;
     float Pre_Yaw=0.0f;

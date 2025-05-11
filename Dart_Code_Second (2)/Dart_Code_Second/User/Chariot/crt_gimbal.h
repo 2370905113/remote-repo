@@ -54,22 +54,11 @@ public:
     void TIM_Gimbal_PeriodElapsedCallback();
     float *auto_yaw;
     float *yaw_delta;
-    float yaw_angle_16m = -2.26f;  //前哨战参考初始角度
+    float yaw_angle_16m = -2.10f;  //前哨战参考初始角度
     float yaw_angle_25m;  //基地参考初始角度
-    float auto_yaw_16m[4]=
-    {
-        -2.5,-2.75,-2.75,2.5
-    };
-    float auto_yaw_25m[4]=
-    {
-        -3.5f,
-        -3.5f,
-        -3.5f,
-        -3.5f
-    };
     float yaw_delta_16m[4]=
     {
-        -0.5,-0.5,-0.25,-0.25    
+        -0.5,-0.5,-0.4,-0.5    
     };
     float yaw_delta_25m[4]=
     {

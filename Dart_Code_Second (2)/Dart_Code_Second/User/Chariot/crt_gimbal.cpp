@@ -35,6 +35,29 @@ void Class_Yaw_Motor::TIM_PID_PeriodElapsedCallback()
         Out = PID_Omega.Get_Out();
     }
     break;
+    case(DJI_Motor_Control_Method_OMEGA):
+    {
+        PID_Omega.Set_Target(Target_Omega_Rpm);
+        PID_Omega.Set_Now(Data.Now_Omega_Rpm);
+        PID_Omega.TIM_Adjust_PeriodElapsedCallback();
+        Out = PID_Omega.Get_Out();
+    }
+    break;
+    case(DJI_Motor_Control_Method_Image):
+    {
+        PID_Image.Set_Target(0.0f);
+        PID_Image.Set_Now(Now_Image);
+        PID_Image.TIM_Adjust_PeriodElapsedCallback();
+
+        Target_Omega_Rpm = PID_Image.Get_Out();
+
+        PID_Omega.Set_Target(Target_Omega_Rpm);
+        PID_Omega.Set_Now(Data.Now_Omega_Rpm);
+        PID_Omega.TIM_Adjust_PeriodElapsedCallback();
+
+        Out = PID_Omega.Get_Out();       
+    }
+    break;
     default:
     {
         Out = 0.0f;
@@ -57,8 +80,8 @@ void Class_Gimbal::Init()
     //yaw初始化
     Yaw.Init(&hcan2,DJI_Motor_ID_0x205,DJI_Motor_Control_Method_IMU_ANGLE);
     Yaw.PID_Angle.Init(4.0f,0.0f,0.0f,0.0f,2000.0f,150,0.0f,0.0f,0.0f,0.001f);
-    Yaw.PID_Omega.Init(20.0f,0.01f,0.0f,0.0f,2000.0f,5000,0.0f,0.0f,0.0f,0.001f);
-    Yaw.PID_Image.Init(0.001f,0.00f,0.0f,0.0f,2000.0f,3,0.0f,0.0f,0.0f,0.001f);
+    Yaw.PID_Omega.Init(80.0f,0.01f,0.0f,0.0f,2000.0f,5000,0.0f,0.0f,0.0f,0.001f);
+    Yaw.PID_Image.Init(0.7f,0.00f,0.0f,0.0f,2000.0f,50.f,0.0f,0.0f,0.0f,0.001f);
 }
 void Class_Gimbal::OutPut()
 {
@@ -71,7 +94,7 @@ void Class_Gimbal::OutPut()
         break;
     case Gimbal_Enable:
         Yaw.yaw_status = Yaw_Enable;
-        Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+        //Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
         //set_yaw_target_angle
         Yaw.Set_Yaw_Target_Angle(Target_Yaw_Angle);
         //计算目标编码器值
