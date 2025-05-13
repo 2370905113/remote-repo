@@ -85,45 +85,69 @@ uint16_t flash_Read_data[12];
 float yaw_temp[12];
 bool Flash_Ready = false;
 int yaw_to_tagert_cnt=0;
+
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
     if (init_finished > 2000)
         start_flag = 1;
-    if (chariot.Referee.Get_Dart_Command_Status() == Referee_Data_Robot_Dart_Command_Status_CLOSED)
+    // if (chariot.Referee.Get_Dart_Command_Status() == Referee_Data_Robot_Dart_Command_Status_CLOSED)
+    // {
+    //     last_launch_flag = now_launch_flag;
+    //     now_launch_flag = 0;
+    // }
+    // if (chariot.Referee.Get_Dart_Command_Status() == Referee_Data_Robot_Dart_Command_Status_OPEN)
+    // {
+    //     last_launch_flag = now_launch_flag;
+    //     now_launch_flag = 1;
+    // }
+    // if (chariot.Referee.Get_Dart_Command_Status() == Referee_Data_Robot_Dart_Command_Status_EXECUTING)
+    // {
+    //     last_launch_flag = now_launch_flag;
+    //     now_launch_flag = 2;
+    // }
+    // if (last_launch_flag == 2 && now_launch_flag == 1)
+    // {
+    //     shoot_temp++;
+    // }
+    
+    if(chariot.Referee.Get_Dart_Command_Status()==Referee_Data_Robot_Dart_Command_Status_OPEN
+    &&chariot.Referee.Get_Dart_Change_Target_Timestamp()!=0
+    &&chariot.Referee.Get_Game_Stage()==Referee_Game_Status_Stage_BATTLE
+    &&chariot.init_flag==true)
     {
-        last_launch_flag = now_launch_flag;
-        now_launch_flag = 0;
+        if(chariot.Referee.Get_Remaining_Time()<=390&&chariot.Referee.Get_Remaining_Time()>=240)
+        {
+            shoot_temp=1;
+        }else if(chariot.Referee.Get_Remaining_Time()<240&&chariot.Referee.Get_Remaining_Time()>1 )
+        {
+            shoot_temp=2;
+        }
+        if(chariot.Referee.Get_Game_Stage()!=Referee_Game_Status_Stage_BATTLE){
+            shoot_temp = 3;
+        }
     }
-    if (chariot.Referee.Get_Dart_Command_Status() == Referee_Data_Robot_Dart_Command_Status_OPEN)
+    else
     {
-        last_launch_flag = now_launch_flag;
-        now_launch_flag = 1;
+        shoot_temp=0;
     }
-    if (chariot.Referee.Get_Dart_Command_Status() == Referee_Data_Robot_Dart_Command_Status_EXECUTING)
-    {
-        last_launch_flag = now_launch_flag;
-        now_launch_flag = 2;
-    }
-    if (last_launch_flag == 2 && now_launch_flag == 1)
-    {
-        shoot_temp++;
-    }
-    if (chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_OUTPOST)
-    {
-        chariot.booster.autofric = chariot.booster.autofric_16m;
+    chariot.booster.autofric = chariot.booster.autofric_16m;
+    chariot.gimbal.yaw_delta = chariot.gimbal.yaw_delta_16m;
+    // if (chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_OUTPOST)
+    // {
+    //     chariot.booster.autofric = chariot.booster.autofric_16m;
 
-        chariot.gimbal.yaw_delta = chariot.gimbal.yaw_delta_16m;
-    }
-    else if (chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_BASE || chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_Randam_BASE)
-    {
-        chariot.booster.autofric = chariot.booster.autofric_25m;
+    //     chariot.gimbal.yaw_delta = chariot.gimbal.yaw_delta_16m;
+    // }
+    // else if (chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_BASE || chariot.Referee.Get_Dart_Command_Target() == Referee_Data_Robot_Dart_Command_Target_Randam_BASE)
+    // {
+    //     chariot.booster.autofric = chariot.booster.autofric_25m;
 
-        chariot.gimbal.yaw_delta = chariot.gimbal.yaw_delta_25m;
-    }
+    //     chariot.gimbal.yaw_delta = chariot.gimbal.yaw_delta_25m;
+    // }
     chariot.booster.Dart_Launch_Status = (Enum_Dart_Launch_Status)(shoot_temp);
 
-    // flash存autoyaw
+    // flash存autoyaw`
 
     for (int i = 0; i < 1; i++)
     {
@@ -150,7 +174,7 @@ void Task1ms_TIM5_Callback()
 
 
     //计算行程
-    if(Math_Abs(chariot.gimbal.Yaw.Yaw_Now_Angle-chariot.gimbal.yaw_angle_16m-chariot.gimbal.yaw_delta[chariot.booster.Actual_Launch_Cnt])<0.05)
+    if(Math_Abs(chariot.gimbal.Yaw.Yaw_Now_Angle-chariot.gimbal.yaw_angle_16m-chariot.gimbal.yaw_delta[chariot.booster.Actual_Launch_Cnt])<0.08)
     {
         yaw_to_tagert_cnt++;
     }
@@ -162,6 +186,9 @@ void Task1ms_TIM5_Callback()
     }
     
     chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
+    // if(huart6.ErrorCode!=0){
+    //     HAL_UART_Init(&huart6);
+    // }
 #ifdef NORMAL
     chariot.TIM_Control_Callback();
 #endif

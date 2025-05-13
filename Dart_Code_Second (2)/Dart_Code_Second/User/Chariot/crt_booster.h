@@ -45,6 +45,7 @@ enum Enum_Dart_Launch_Status:uint8_t
    Dart_Init=0,
    Dart_30s=1,
    Dart_4min=2,
+   End_Game,
 };
 class Class_Fric_Motor : public Class_DJI_Motor_C620
 {
@@ -86,7 +87,7 @@ public:
     //int16_t autofric[4] = {7743, 7652, 7688, 7926};
     // int16_t autofric[4] = {6880, 6936, 6325, 6381};
     //int32_t autofric[4] = {7000, 7000, 7000, 7000};
-    int16_t autofric_16m[4]={6400,6250,6300,6300};
+    int16_t autofric_16m[4]={6400,6325,6350,6400};
     int16_t autofric_25m[4]={6500,7500,7500,7500};
     int16_t* autofric;
     int yaw_to_target_cnt=0;

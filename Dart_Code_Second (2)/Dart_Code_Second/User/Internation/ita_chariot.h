@@ -30,6 +30,7 @@ public:
     //上位机
     Class_MiniPC MiniPC;
     Class_Referee Referee;
+    bool init_flag=false;
 //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
@@ -42,7 +43,7 @@ protected:
     void Control_Booster();
     void Control_Gimbal();
     float MiniPC_Yaw_K=-0.001f;
-    bool init_flag=false;
+    
     int init_cnt=0;
     float auto_gimbal_yaw;
     bool Gimbal_Calibration_Bool = false;
