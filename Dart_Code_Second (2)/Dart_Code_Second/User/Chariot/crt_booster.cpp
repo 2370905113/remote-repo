@@ -61,7 +61,7 @@ void Class_Booster::Init()
     // 初始化发射机构使能状态
     booster_status = Booster_Disable;
     // 初始化发射状态机
-    booster_fsm.Init(3, 0);
+    booster_fsm.Init(4, 0);
     // 摩擦轮电机初始化
     Fric_Motor[0].Init(&hcan1, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA, 1.0f);
     Fric_Motor[0].PID_Omega.Init(5.0f, 0.01f, 0.0f, 0.0f, 2000.0f, 16500.0f, 0.0f, 0.0f, 0.0f, 0.001);
@@ -137,28 +137,17 @@ void Class_Booster::OutPut()
                 Fric_Motor[i].Set_Target_Omega_Rpm(0);
             }
         }
-        // Push机构
-        //  switch (booster_control_type)
-        //  {
-        //  case Booster_Control_Ceasefire:
-        //  { // 0:判断cnt数量：if==4 -> 清0 , 转到2; if(！=4) -> 1;
-        //      // 1转到判断cnt=1,2,3,4,是否到达目标位置，if(到目标位置)->cnt=cnt;转到0
-        //      // 2:恢复飞镖Push零位，if(恢复到0位)；转到
-        //  break;
-
-        // case Booster_Control_Single:
-        // {
-        //     cnt++;
-        //     Push_Motor.Push_Target_length = (float)cnt * 0.145f;
-        // }
-        // break;
-        // }
         Push_Motor.push_status = Push_Enable;
         Push_Motor.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
         switch (booster_fsm.Get_Now_Status_Serial())
         {
         case 0:
+        {
+            //空白状态
+        }
+        break;
+        case 1:
         {
             
 #ifdef DEBUG
@@ -170,26 +159,16 @@ void Class_Booster::OutPut()
 #endif
 
 #ifdef NORMAL
-            if (Dart_Launch_Status == Dart_30s && Target_Launch_Cnt < 4)
+            if (Dart_Launch_Status !=End_Game  && Target_Launch_Cnt < 4)
             {
                 Target_Launch_Cnt++;
-                booster_fsm.Set_Status(1);
-            }
-            if (Dart_Launch_Status == Dart_4min && Target_Launch_Cnt <= 4 && Target_Launch_Cnt >= 4)
-            {
-                Target_Launch_Cnt++;
-                booster_fsm.Set_Status(1);
-            }
-#endif
-            if (Target_Launch_Cnt > 4 || (Push_Backward_To_Zero_Pos == ENABLE))
-            {
                 booster_fsm.Set_Status(2);
             }
+#endif
         }
         break;
-        case 1:
+        case 2:
         {
-
             if (Yaw_To_Target_Bool)
             {
                 Launch_Change_Bool=true;
@@ -200,11 +179,15 @@ void Class_Booster::OutPut()
                 Actual_Launch_Cnt = Target_Launch_Cnt;
                 Launch_Change_Bool=false;
                 Set_Booster_Control_Type(Booster_Control_Ceasefire);
-                booster_fsm.Set_Status(0);
+                if(Actual_Launch_Cnt==4){
+                    booster_fsm.Set_Status(3);
+                }else{
+                    booster_fsm.Set_Status(1);
+                }
             }
         }
         break;
-        case 2:
+        case 3:
         {
             Push_Motor.Push_Target_length = Zero_Length;
             if (fabsf(Push_Motor.Push_Target_length - Push_Motor.Push_Now_Length) < 0.001f)

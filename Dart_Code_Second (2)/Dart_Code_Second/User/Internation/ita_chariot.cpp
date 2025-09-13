@@ -13,6 +13,7 @@ void Class_Chariot::Init()
 }
 void Class_Chariot::Control_Booster()
 {
+    static bool start_flag = false;
     static uint8_t Shoot_Flag = 0;
     static uint8_t Shoot_Cnt = 0;
 #ifdef DEBUG
@@ -55,25 +56,24 @@ void Class_Chariot::Control_Booster()
 #endif
 
 #ifdef NORMAL
-    if (booster.Dart_Launch_Status == Dart_30s || booster.Dart_Launch_Status == Dart_4min)
+    if (Referee.Get_Game_Stage()==Referee_Game_Status_Stage_BATTLE)
     {
         booster.Set_Booster_Status(Booster_Enable);
         booster.Set_Fric_Open_Status(Fric_Open);
         booster.Push_Backward_To_Zero_Pos = DISABLE;
         booster.Set_Booster_Control_Type(Booster_Control_Ceasefire);
     }
-    else if(booster.Dart_Launch_Status == End_Game)
+    else
     {
         booster.Set_Booster_Status(Booster_Enable);
         booster.Set_Fric_Open_Status(Fric_Close);
-        booster.Push_Backward_To_Zero_Pos = ENABLE;
     }
-    // if(booster.Dart_Launch_Status == Dart_4min&&booster.Push_Motor.Push_Now_Length < 0.002)
-    // {
-    //     booster.Set_Booster_Status(Booster_Enable);
-    //     booster.Set_Fric_Open_Status(Fric_Close);
-    //     booster.Push_Backward_To_Zero_Pos = ENABLE;
-    // }
+    if((booster.Dart_Launch_Status==Dart_30s||booster.Dart_Launch_Status==Dart_4min)
+        && start_flag==false)
+    {
+        booster.booster_fsm.Set_Status(1);
+        start_flag = true;
+    }
 #endif // NORMAL
 }
 float K = 0.04f;

@@ -123,9 +123,9 @@ void Task1ms_TIM5_Callback()
         {
             shoot_temp=2;
         }
-        if(chariot.Referee.Get_Game_Stage()!=Referee_Game_Status_Stage_BATTLE){
-            shoot_temp = 3;
-        }
+    }
+    else if(chariot.Referee.Get_Game_Stage()!=Referee_Game_Status_Stage_BATTLE){
+        shoot_temp = 3;
     }
     else
     {
